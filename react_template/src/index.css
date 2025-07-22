@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #ff9800; /* Default primary color (orange) */
+  --transition-direction: translateX;
+}
+
+/* Color schemes */
+body.purple {
+  --color-primary: #9200ee;
+}
+
+body.red {
+  --color-primary: #fe0000;
+}
+
+body.blueviolet {
+  --color-primary: #8a2be2;
+}
+
+body.blue {
+  --color-primary: #0000ff;
+}
+
+body.goldenrod {
+  --color-primary: #daa520;
+}
+
+body.magenta {
+  --color-primary: #ff00ff;
+}
+
+body.yellowgreen {
+  --color-primary: #9acd32;
+}
+
+body.orange {
+  --color-primary: #ff9800;
+}
+
+body.green {
+  --color-primary: #008000;
+}
+
+body.yellow {
+  --color-primary: #ffff00;
+}
+
+/* Base styles */
+body {
+  @apply font-sans text-gray-500 bg-gray-900 dark:text-gray-300 dark:bg-gray-100;
+  overflow-x: hidden;
+}
+
+.light-mode {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.dark-mode {
+  @apply bg-gray-900 text-gray-200;
+}
+
+/* Common styles */
+.section-container {
+  @apply w-full h-screen overflow-hidden relative;
+}
+
+.content-container {
+  @apply max-w-[1200px] mx-auto px-6 lg:px-12;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-primary px-6 py-3 text-white rounded font-medium hover:opacity-90 transition-all flex items-center gap-2;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 25px;
+  transition: all 0.3s;
+  background-color: rgba(106, 115, 125, 0.2);
+  &:hover {
+    background-color: rgba(106, 115, 125, 0.27);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
+/* Page transition animations */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+/* Slide animations for transition directions */
+.slide-right-enter {
+  transform: translateX(100%);
+}
+
+.slide-right-enter-active {
+  transform: translateX(0);
+  transition: transform 500ms;
+}
+
+.slide-right-exit {
+  transform: translateX(0);
+}
+
+.slide-right-exit-active {
+  transform: translateX(-100%);
+  transition: transform 500ms;
+}
+
+.slide-left-enter {
+  transform: translateX(-100%);
+}
+
+.slide-left-enter-active {
+  transform: translateX(0);
+  transition: transform 500ms;
+}
+
+.slide-left-exit {
+  transform: translateX(0);
+}
+
+.slide-left-exit-active {
+  transform: translateX(100%);
+  transition: transform 500ms;
+}
+
+.slide-top-enter {
+  transform: translateY(-100%);
+}
+
+.slide-top-enter-active {
+  transform: translateY(0);
+  transition: transform 500ms;
+}
+
+.slide-top-exit {
+  transform: translateY(0);
+}
+
+.slide-top-exit-active {
+  transform: translateY(100%);
+  transition: transform 500ms;
+}
+
+.slide-bottom-enter {
+  transform: translateY(100%);
+}
+
+.slide-bottom-enter-active {
+  transform: translateY(0);
+  transition: transform 500ms;
+}
+
+.slide-bottom-exit {
+  transform: translateY(0);
+}
+
+.slide-bottom-exit-active {
+  transform: translateY(-100%);
+  transition: transform 500ms;
+}
