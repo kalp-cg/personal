@@ -1,49 +1,146 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaSun, FaMoon, FaCog, FaBars } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import { FaSun, FaMoon, FaCog, FaBars, FaTimes, FaDownload } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
 
 const Header = ({ isMobileNavOpen, setIsMobileNavOpen, showSettings, setShowSettings }) => {
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const [pageTitle, setPageTitle] = useState('Home');
+
+  // Handle scroll event to change header style
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Set page title based on current path
+  useEffect(() => {
+    const path = location.pathname;
+    switch(path) {
+      case '/':
+        setPageTitle('Home');
+        break;
+      case '/about':
+        setPageTitle('About Me');
+        break;
+      case '/resume':
+        setPageTitle('Resume');
+        break;
+      case '/portfolio':
+        setPageTitle('Portfolio');
+        break;
+      case '/blog':
+        setPageTitle('Blog');
+        break;
+      case '/contact':
+        setPageTitle('Contact');
+        break;
+      default:
+        setPageTitle('Home');
+    }
+  }, [location]);
 
   return (
     <motion.header
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`sticky top-0 w-full z-40 px-5 py-4 flex justify-between items-center
-        ${theme === 'dark' ? 'bg-[#222]/80 text-white backdrop-blur-sm' : 'bg-white/80 text-gray-800 backdrop-blur-sm shadow-sm'}`}
+      className={`sticky top-0 w-full z-40 px-5 sm:px-8 py-4 flex justify-between items-center transition-all duration-300
+        ${scrolled 
+          ? `${theme === 'dark' ? 'bg-gray-900/90 shadow-lg' : 'bg-white/90 shadow-md'} backdrop-blur-md` 
+          : `${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}`}
+        ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}
     >
-      {/* Mobile Menu Button - only visible on mobile */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-        className="text-xl md:hidden"
-      >
-        <FaBars />
-      </motion.button>
-      
-      {/* Empty div for desktop to maintain space */}
-      <div className="hidden md:block"></div>
+      {/* Left side - Mobile menu button and page title */}
+      <div className="flex items-center gap-4">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          className="text-xl md:hidden relative z-50"
+          aria-label="Toggle mobile menu"
+        >
+          {isMobileNavOpen ? <FaTimes /> : <FaBars />}
+        </motion.button>
+        
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="hidden md:flex items-center"
+        >
+          {location.pathname !== '/' && (
+            <motion.h1 
+              className="text-xl font-bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              key={pageTitle}
+            >
+              {pageTitle}
+            </motion.h1>
+          )}
+        </motion.div>
+      </div>
       
       {/* Right Side Controls */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
+        {location.pathname === '/resume' && (
+          <motion.a
+            href="/resume.pdf" /* Update with actual resume link */
+            download="steve_milner_resume.pdf"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`hidden sm:flex items-center gap-2 py-2 px-4 rounded text-sm font-medium
+              ${theme === 'dark' 
+                ? 'bg-gray-800 hover:bg-gray-700 text-white' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} 
+              transition-all duration-300`}
+          >
+            <FaDownload size={14} /> Resume
+          </motion.a>
+        )}
+        
         <motion.button
           onClick={toggleTheme}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="text-xl hover:text-primary transition-colors duration-300"
+          className={`flex justify-center items-center w-9 h-9 rounded-full 
+            ${theme === 'dark' 
+              ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' 
+              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'} 
+            transition-colors duration-300`}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {theme === 'dark' ? <FaSun /> : <FaMoon />}
         </motion.button>
+        
         <motion.button
           onClick={() => setShowSettings(!showSettings)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className={`text-xl transition-colors duration-300 ${showSettings ? 'text-primary' : 'hover:text-primary'} settings-button`}
+          className={`flex justify-center items-center w-9 h-9 rounded-full transition-colors duration-300 settings-button
+            ${showSettings 
+              ? 'bg-primary text-white' 
+              : `${theme === 'dark' 
+                  ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}`}
+          aria-label="Color settings"
         >
-          <FaCog className={showSettings ? 'animate-spin-slow' : 'animate-none'} />
+          <FaCog className={showSettings ? 'animate-spin-slow' : ''} />
         </motion.button>
       </div>
     </motion.header>
