@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 
-const Skills = () => {
+const Skills = ({ showTitle = true }) => {
   const { theme } = useTheme();
   
   const skills = [
@@ -14,15 +14,33 @@ const Skills = () => {
     { name: 'Flutter', percentage: 70 },
   ];
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.4 }
+    }
+  };
+
   return (
     <div>
-      <h3 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-        My Skills
-      </h3>
+      {showTitle && (
+        <h3 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+          My Skills
+        </h3>
+      )}
       
       <div className="space-y-5">
         {skills.map((skill, index) => (
-          <div key={index} className="w-full">
+          <motion.div 
+            key={index} 
+            className="w-full"
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: index * 0.1 }}
+          >
             <div className="flex justify-between items-center mb-1">
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                 {skill.name}
@@ -39,7 +57,7 @@ const Skills = () => {
                 className="h-full rounded-full bg-primary"
               />
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

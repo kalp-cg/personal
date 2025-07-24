@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPlus, FaLink, FaPlay } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
+import PropTypes from 'prop-types';
 
-const PortfolioItem = ({ item }) => {
+const ProjectItem = ({ item }) => {
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -23,11 +24,19 @@ const PortfolioItem = ({ item }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative overflow-hidden w-full h-64">
-        {/* Placeholder for image - using a background color */}
-        <div 
-          className="w-full h-full bg-gray-300"
-          style={{ backgroundColor: theme === 'dark' ? '#333' : '#e5e7eb' }}
-        ></div>
+        {/* Project Image */}
+        {item.image ? (
+          <img 
+            src={item.image} 
+            alt={item.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div 
+            className="w-full h-full bg-gray-300"
+            style={{ backgroundColor: theme === 'dark' ? '#333' : '#e5e7eb' }}
+          />
+        )}
 
         <motion.div 
           className="absolute inset-0 bg-primary/80 flex flex-col items-center justify-center p-5"
@@ -70,4 +79,13 @@ const PortfolioItem = ({ item }) => {
   );
 };
 
-export default PortfolioItem;
+ProjectItem.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    image: PropTypes.string
+  }).isRequired
+};
+
+export default ProjectItem;

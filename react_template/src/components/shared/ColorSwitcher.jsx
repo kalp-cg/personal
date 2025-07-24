@@ -1,134 +1,142 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
 import { FaTimes, FaCheck, FaArrowRight } from 'react-icons/fa';
+import { useTheme } from '../../context/ThemeContext';
+import PropTypes from 'prop-types';
 
-const ColorSwitcher = () => {
-  const { theme, isColorPanelOpen, toggleColorPanel, changeColorScheme, changeTransitionDirection, colorScheme, transitionDirection } = useTheme();
+const ColorSwitcher = ({ isOpen, onClose }) => {
+  const { theme, colorScheme, changeColorScheme, transitionDirection, changeTransitionDirection } = useTheme();
   const [activeTab, setActiveTab] = useState('colors');
 
   const colors = [
-    { name: 'purple', color: '#9200ee', label: 'Purple' },
-    { name: 'red', color: '#fe0000', label: 'Red' },
-    { name: 'blueviolet', color: '#8a2be2', label: 'Blue Violet' },
-    { name: 'blue', color: '#0000ff', label: 'Blue' },
-    { name: 'goldenrod', color: '#daa520', label: 'Gold' },
-    { name: 'magenta', color: '#ff00ff', label: 'Magenta' },
-    { name: 'yellowgreen', color: '#9acd32', label: 'Green' },
-    { name: 'orange', color: '#ff9800', label: 'Orange' },
-    { name: 'green', color: '#008000', label: 'Dark Green' },
-    { name: 'cyan', color: '#00bcd4', label: 'Cyan' },
+    { name: 'purple', value: '#9200ee', label: 'Purple' },
+    { name: 'red', value: '#fe0000', label: 'Red' },
+    { name: 'blueviolet', value: '#8a2be2', label: 'Blue Violet' },
+    { name: 'blue', value: '#0000ff', label: 'Blue' },
+    { name: 'goldenrod', value: '#daa520', label: 'Goldenrod' },
+    { name: 'magenta', value: '#ff00ff', label: 'Magenta' },
+    { name: 'yellowgreen', value: '#9acd32', label: 'Yellow Green' },
+    { name: 'orange', value: '#ff9800', label: 'Orange' },
+    { name: 'green', value: '#008000', label: 'Green' },
+    { name: 'yellow', value: '#ffff00', label: 'Yellow' },
   ];
 
   const directions = [
-    { name: 'slide-right', label: 'Right to Left', icon: '→' },
-    { name: 'slide-left', label: 'Left to Right', icon: '←' },
-    { name: 'slide-top', label: 'Top to Bottom', icon: '↓' },
-    { name: 'slide-bottom', label: 'Bottom to Top', icon: '↑' },
+    { name: 'fade', label: 'Fade Transition', icon: '✨' },
+    { name: 'slide-left', label: 'Slide Left', icon: '👈' },
+    { name: 'slide-right', label: 'Slide Right', icon: '👉' },
+    { name: 'slide-down', label: 'Slide Down', icon: '👇' },
+    { name: 'slide-up', label: 'Slide Up', icon: '👆' },
   ];
 
-  const containerVariants = {
+  const backdropVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
+  const panelVariants = {
     hidden: { x: '100%', opacity: 0 },
     visible: { 
-      x: 0,
+      x: 0, 
       opacity: 1,
-      transition: { 
-        type: 'spring', 
-        stiffness: 300, 
-        damping: 30 
-      } 
+      transition: {
+        type: 'spring',
+        damping: 25,
+        stiffness: 300,
+      }
     },
     exit: { 
-      x: '100%',
+      x: '100%', 
       opacity: 0,
-      transition: { 
-        duration: 0.3 
-      } 
-    }
+      transition: {
+        type: 'spring',
+        damping: 25,
+        stiffness: 300,
+      }
+    },
   };
 
   const tabVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { opacity: 0, y: 20 },
     visible: { 
-      y: 0, 
-      opacity: 1,
+      opacity: 1, 
+      y: 0,
       transition: {
-        delay: 0.2,
-        duration: 0.5
-      }
+        duration: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      } 
     },
     exit: { 
-      y: 20, 
-      opacity: 0,
-      transition: {
-        duration: 0.2
-      }
-    }
+      opacity: 0, 
+      y: -20,
+      transition: { duration: 0.2 } 
+    },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: (custom) => ({
+    hidden: { opacity: 0, x: 20 },
+    visible: (i) => ({
       opacity: 1,
       x: 0,
-      transition: { 
-        delay: custom * 0.05,
-        duration: 0.3
-      }
-    })
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+      },
+    }),
+  };
+
+  const handleColorChange = (colorName) => {
+    changeColorScheme(colorName);
+  };
+
+  const handleTransitionChange = (direction) => {
+    changeTransitionDirection(direction);
   };
 
   return (
     <AnimatePresence>
-      {isColorPanelOpen && (
+      {isOpen && (
         <>
-          {/* Backdrop overlay */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-40"
-            onClick={toggleColorPanel}
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-40"
+            variants={backdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={onClose}
           />
           
-          {/* Settings panel */}
           <motion.div
-            variants={containerVariants}
+            className="fixed right-0 top-0 bottom-0 w-80 z-50 flex flex-col"
+            variants={panelVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`fixed top-0 right-0 w-72 h-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} shadow-2xl z-50 overflow-hidden rounded-l-2xl`}
           >
-            <div className="h-full flex flex-col">
+            <div className={`flex flex-col h-full ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} shadow-xl`}>
               {/* Header */}
-              <div className={`flex justify-between items-center px-6 py-5 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
-                <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                  Customize
-                </h3>
+              <div className={`px-6 py-4 border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} flex justify-between items-center`}>
+                <h3 className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Customize Theme</h3>
                 <motion.button
+                  onClick={onClose}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={toggleColorPanel}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${theme === 'dark' ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                  aria-label="Close settings"
+                  className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
                 >
-                  <FaTimes size={14} />
+                  <FaTimes className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} />
                 </motion.button>
               </div>
               
               {/* Tabs */}
-              <div className={`flex border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+              <div className="flex border-b border-gray-200 dark:border-gray-800">
                 <button
                   onClick={() => setActiveTab('colors')}
-                  className={`flex-1 py-3 text-sm font-medium relative ${
-                    activeTab === 'colors' 
-                      ? 'text-primary' 
-                      : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                  }`}
+                  className={`flex-1 py-3 px-4 text-sm font-medium relative ${activeTab === 'colors' ? 'text-primary' : theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
                 >
-                  Theme Colors
+                  Colors
                   {activeTab === 'colors' && (
-                    <motion.div 
+                    <motion.div
                       layoutId="activeTab"
                       className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
                     />
@@ -136,15 +144,11 @@ const ColorSwitcher = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab('transitions')}
-                  className={`flex-1 py-3 text-sm font-medium relative ${
-                    activeTab === 'transitions' 
-                      ? 'text-primary' 
-                      : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                  }`}
+                  className={`flex-1 py-3 px-4 text-sm font-medium relative ${activeTab === 'transitions' ? 'text-primary' : theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
                 >
                   Transitions
                   {activeTab === 'transitions' && (
-                    <motion.div 
+                    <motion.div
                       layoutId="activeTab"
                       className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
                     />
@@ -152,7 +156,7 @@ const ColorSwitcher = () => {
                 </button>
               </div>
               
-              {/* Tab content */}
+              {/* Content */}
               <div className="flex-1 overflow-y-auto p-6">
                 <AnimatePresence mode="wait">
                   {activeTab === 'colors' && (
@@ -165,10 +169,10 @@ const ColorSwitcher = () => {
                       className="h-full"
                     >
                       <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                        Choose your preferred accent color for the entire website.
+                        Select your preferred accent color for buttons and interactive elements.
                       </p>
                       
-                      <div className="grid grid-cols-5 gap-4 mb-8">
+                      <div className="grid grid-cols-5 gap-3 mb-8">
                         {colors.map((color, index) => (
                           <motion.button
                             key={color.name}
@@ -176,27 +180,21 @@ const ColorSwitcher = () => {
                             variants={itemVariants}
                             initial="hidden"
                             animate="visible"
-                            whileHover={{ scale: 1.1, y: -2 }}
+                            onClick={() => handleColorChange(color.name)}
+                            className={`w-full aspect-square rounded-full flex items-center justify-center`}
+                            style={{ backgroundColor: color.value }}
+                            whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => changeColorScheme(color.name)}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              colorScheme === color.name 
-                                ? `ring-2 ${theme === 'dark' ? 'ring-white' : 'ring-gray-800'} ring-offset-2 ${theme === 'dark' ? 'ring-offset-gray-900' : 'ring-offset-white'}` 
-                                : ''
-                            }`}
-                            style={{ backgroundColor: color.color }}
-                            title={color.label}
-                            aria-label={`Select ${color.label} theme color`}
                           >
                             {colorScheme === color.name && (
-                              <FaCheck className="text-white text-xs" />
+                              <FaCheck className="text-white" />
                             )}
                           </motion.button>
                         ))}
                       </div>
                       
-                      <div className={`p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
-                        <div className="flex items-start">
+                      <div className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                        <div className="flex-1">
                           <div className={`mr-3 p-2 rounded-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                             <span className="text-primary text-lg">💡</span>
                           </div>
@@ -230,7 +228,7 @@ const ColorSwitcher = () => {
                             initial="hidden"
                             animate="visible"
                             whileHover={{ x: 5 }}
-                            onClick={() => changeTransitionDirection(direction.name)}
+                            onClick={() => handleTransitionChange(direction.name)}
                             className={`w-full flex items-center justify-between p-3 rounded-lg transition-all ${
                               transitionDirection === direction.name
                                 ? `bg-primary/10 text-primary`
@@ -272,6 +270,11 @@ const ColorSwitcher = () => {
       )}
     </AnimatePresence>
   );
+};
+
+ColorSwitcher.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default ColorSwitcher;

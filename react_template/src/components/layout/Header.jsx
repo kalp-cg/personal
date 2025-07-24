@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { FaSun, FaMoon, FaCog, FaBars, FaTimes, FaDownload } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
+import PropTypes from 'prop-types';
 
 const Header = ({ isMobileNavOpen, setIsMobileNavOpen, showSettings, setShowSettings }) => {
   const { theme, toggleTheme } = useTheme();
@@ -39,11 +40,11 @@ const Header = ({ isMobileNavOpen, setIsMobileNavOpen, showSettings, setShowSett
       case '/resume':
         setPageTitle('Resume');
         break;
-      case '/portfolio':
-        setPageTitle('Portfolio');
+      case '/projects':
+        setPageTitle('Projects');
         break;
-      case '/blog':
-        setPageTitle('Blog');
+      case '/clicks':
+        setPageTitle('Clicks');
         break;
       case '/contact':
         setPageTitle('Contact');
@@ -101,7 +102,7 @@ const Header = ({ isMobileNavOpen, setIsMobileNavOpen, showSettings, setShowSett
         {location.pathname === '/resume' && (
           <motion.a
             href="/resume.pdf" /* Update with actual resume link */
-            download="steve_milner_resume.pdf"
+            download="kalp_patel_resume.pdf"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className={`hidden sm:flex items-center gap-2 py-2 px-4 rounded text-sm font-medium
@@ -145,6 +146,13 @@ const Header = ({ isMobileNavOpen, setIsMobileNavOpen, showSettings, setShowSett
       </div>
     </motion.header>
   );
+};
+
+Header.propTypes = {
+  isMobileNavOpen: PropTypes.bool.isRequired,
+  setIsMobileNavOpen: PropTypes.func.isRequired,
+  showSettings: PropTypes.bool.isRequired,
+  setShowSettings: PropTypes.func.isRequired
 };
 
 export default Header;

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
-import ContactForm from './ContactForm';
+import ContactForm from '../shared/ContactForm';
 
 const ContactPage = () => {
   const { theme } = useTheme();

@@ -6,15 +6,15 @@ import { ThemeProvider } from './context/ThemeContext';
 // Layout Components
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
-import ColorSwitcher from './components/layout/ColorSwitcher';
-import PageLoader from './components/layout/PageLoader';
+import ColorSwitcher from './components/shared/ColorSwitcher';
+import PageLoader from './components/shared/PageLoader';
 
 // Page Components
 import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
 import ResumePage from './components/resume/ResumePage';
-import PortfolioPage from './components/portfolio/PortfolioPage';
-import BlogPage from './components/blog/BlogPage';
+import ProjectsPage from './components/projects/ProjectsPage';
+import ClicksPage from './components/clicks/ClicksPage';
 import ContactPage from './components/contact/ContactPage';
 
 // ScrollToTop component for route changes
@@ -62,7 +62,7 @@ function App() {
   // Handle page visibility for accessibility
   useEffect(() => {
     const handleVisibilityChange = () => {
-      document.title = document.hidden ? 'Come Back to Portfolio' : 'Steve Milner | Portfolio';
+      document.title = document.hidden ? 'Come Back to Portfolio' : 'Kalp Patel | Portfolio';
     };
     
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -83,7 +83,11 @@ function App() {
   }, [isMobileNavOpen]);
 
   if (isLoading) {
-    return <PageLoader />;
+    return (
+      <ThemeProvider>
+        <PageLoader />
+      </ThemeProvider>
+    );
   }
 
   return (
@@ -115,8 +119,8 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/resume" element={<ResumePage />} />
-                  <Route path="/portfolio" element={<PortfolioPage />} />
-                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/clicks" element={<ClicksPage />} />
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
@@ -124,7 +128,7 @@ function App() {
             </main>
             
             {/* Color Switcher Settings Panel */}
-            <ColorSwitcher showSettings={showSettings} />
+            <ColorSwitcher isOpen={showSettings} onClose={() => setShowSettings(false)} />
             
             {/* Footer - only on specific pages */}
             <footer className="text-center py-4 text-sm text-gray-500 dark:text-gray-400 mt-auto">

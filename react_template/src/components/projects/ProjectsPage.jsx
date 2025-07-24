@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
-import PortfolioItem from './PortfolioItem';
+import ProjectItem from '../shared/ProjectItem';
 
-const PortfolioPage = () => {
+const ProjectsPage = () => {
   const { theme } = useTheme();
   const [activeFilter, setActiveFilter] = useState('all');
   
@@ -15,7 +15,7 @@ const PortfolioPage = () => {
     { id: 'mockup', name: 'MOCKUP' }
   ];
   
-  const portfolioItems = [
+  const projectItems = [
     {
       id: 1,
       title: 'YouTube Video',
@@ -61,8 +61,8 @@ const PortfolioPage = () => {
   ];
   
   const filteredItems = activeFilter === 'all' 
-    ? portfolioItems 
-    : portfolioItems.filter(item => item.category === activeFilter);
+    ? projectItems 
+    : projectItems.filter(item => item.category === activeFilter);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -94,7 +94,7 @@ const PortfolioPage = () => {
     >
       <motion.div variants={itemVariants} className="mb-12">
         <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-          MY <span className="text-primary">PORTFOLIO</span>
+          MY <span className="text-primary">PROJECTS</span>
         </h1>
         <div className="flex items-center gap-2">
           <span className="w-12 h-1 bg-primary"></span>
@@ -129,11 +129,11 @@ const PortfolioPage = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         {filteredItems.map((item) => (
-          <PortfolioItem key={item.id} item={item} />
+          <ProjectItem key={item.id} item={item} />
         ))}
       </motion.div>
     </motion.div>
   );
 };
 
-export default PortfolioPage;
+export default ProjectsPage;

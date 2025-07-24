@@ -1,9 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../context/ThemeContext';
 
-const PageLoader = () => {
+const PageLoader = ({ message = 'Loading' }) => {
+  const { theme } = useTheme();
+  
   return (
-    <div className="fixed inset-0 bg-white dark:bg-gray-900 flex items-center justify-center z-50">
+    <div className={`fixed inset-0 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} flex items-center justify-center z-50`}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ 
@@ -49,8 +52,8 @@ const PageLoader = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
         >
-          <h2 className="text-gray-800 dark:text-white text-xl font-semibold text-center">
-            Loading
+          <h2 className={`${theme === 'dark' ? 'text-white' : 'text-gray-800'} text-xl font-semibold text-center`}>
+            {message}
             <motion.span
               initial={{ opacity: 0 }}
               animate={[

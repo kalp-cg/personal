@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaHome, FaUser, FaGraduationCap, FaBriefcase, FaEnvelope, FaRss, FaGithub, FaLinkedin, FaDribbble, FaTwitter } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
+import Logo from '../shared/Logo';
 
 const Sidebar = ({ isMobileNavOpen, setIsMobileNavOpen, handleNavigation }) => {
   const { theme } = useTheme();
@@ -12,8 +13,8 @@ const Sidebar = ({ isMobileNavOpen, setIsMobileNavOpen, handleNavigation }) => {
     { path: '/', icon: <FaHome />, text: 'HOME' },
     { path: '/about', icon: <FaUser />, text: 'ABOUT' },
     { path: '/resume', icon: <FaGraduationCap />, text: 'RESUME' },
-    { path: '/portfolio', icon: <FaBriefcase />, text: 'PORTFOLIO' },
-    { path: '/blog', icon: <FaRss />, text: 'BLOG' },
+    { path: '/projects', icon: <FaBriefcase />, text: 'PROJECTS' },
+    { path: '/clicks', icon: <FaRss />, text: 'CLICKS' },
     { path: '/contact', icon: <FaEnvelope />, text: 'CONTACT' },
   ];
   
@@ -81,13 +82,7 @@ const Sidebar = ({ isMobileNavOpen, setIsMobileNavOpen, handleNavigation }) => {
           variants={childVariants}
           className="flex flex-col items-center lg:items-start pt-8 px-4 lg:px-10 mb-8"
         >
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <span className="text-primary font-bold text-2xl">KP</span>
-          </div>
-          <h1 className={`hidden lg:block text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-            Kalp Patel
-          </h1>
-          <p className="hidden lg:block text-primary font-medium text-sm">Web Developer & UI/UX Designer</p>
+          <Logo />
         </motion.div>
         
         <motion.nav 
@@ -164,7 +159,7 @@ const Sidebar = ({ isMobileNavOpen, setIsMobileNavOpen, handleNavigation }) => {
           variants={childVariants}
           className="hidden lg:block px-10 py-4 text-xs text-gray-500 dark:text-gray-400"
         >
-          © {new Date().getFullYear()} Steve Milner
+          © {new Date().getFullYear()} Kalp Patel
         </motion.div>
       </motion.aside>
       
@@ -191,12 +186,7 @@ const Sidebar = ({ isMobileNavOpen, setIsMobileNavOpen, handleNavigation }) => {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-800">
-            <div className="flex flex-col">
-              <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-               Kalp Patel
-              </h2>
-              <p className="text-primary text-sm">UI/UX Designer</p>
-            </div>
+            <Logo size="small" />
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

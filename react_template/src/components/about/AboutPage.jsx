@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaDownload } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
-import PersonalInfo from './PersonalInfo';
-import Skills from './Skills';
-import Experience from './Experience';
-import Education from './Education';
+import PersonalInfo from '../shared/PersonalInfo';
+import Skills from '../shared/Skills';
+import Experience from '../shared/Experience';
+import Education from '../shared/Education';
+import ResumeButton from '../shared/ResumeButton';
 
 const AboutPage = () => {
   const { theme } = useTheme();
@@ -68,14 +68,9 @@ const AboutPage = () => {
           
           <PersonalInfo />
           
-          <motion.button
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary mt-8"
-          >
-            DOWNLOAD CV <FaDownload />
-          </motion.button>
+          <div className="mt-8">
+            <ResumeButton />
+          </div>
         </motion.div>
         
         <motion.div variants={itemVariants} className="lg:col-span-1">
